@@ -1,0 +1,32 @@
+.PostList {
+    margin: 20px auto;
+    width: 80%;
+    text-align: center;
+    box-shadow: 0 2px 3px #ccc;
+    border: 1px solid #eee;
+    padding: 10px;
+    box-sizing: border-box;
+}
+
+.PostList ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    text-align: center;
+}
+
+.PostList li {
+    display: inline-block;
+    margin: 20px;
+}
+
+.PostList a {
+    text-decoration: none;
+    color: black;
+}
+
+.PostList a:hover,
+.PostList a:active {
+    color: #fa923f;
+}
