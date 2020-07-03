@@ -3,12 +3,12 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import * as actions from '../../../store/actions/index';
 import './PostList.css';
-import Post from '../../../components/Post/Post'
+import { Grid, Segment } from 'semantic-ui-react'
 
 class PostList extends Component {
 
     componentDidMount() {
-        this.props.getPost(this.props.token ,this.props.userId);
+        this.props.getPost(this.props.token, this.props.userId);
     }
 
     postSelectedHandler = (post_id) => {
@@ -16,20 +16,19 @@ class PostList extends Component {
     }
 
     render() {
-       let posts = this.props.posts.map(post => {
-           console.log("post", post)
-                return <Post 
-                key={post.id} 
-                title={post.title} 
-                clicked={() => this.postSelectedHandler(post.id)} />;
-            })
-        return (
-            <div className="PostList">
-                <section  className="PostList" >
-                    {posts}
-                </section>
-            </div>
-        );
+        return (<div>
+            {this.props.posts.map((post) => (
+                <div key={post.id} onClick={() => this.postSelectedHandler(post.id)}>
+                    <Grid columns={3} divided>
+                        <Grid.Row stretched>
+                            <Grid.Column>
+                                <Segment>{post.title}</Segment>
+                            </Grid.Column>
+                        </Grid.Row>
+                    </Grid>
+                </div>
+            ))}
+        </div>)
     }
 }
 
@@ -37,16 +36,15 @@ const mapStateToProps = state => {
     return {
         posts: state.post.posts,
         error: state.post.error,
-        token : state.auth.token,
-        userId : state.auth.userId
+        token: state.auth.token,
+        userId: state.auth.userId
     }
 }
 
 const mapDispatchToProps = dispatch => {
     return {
-        getPost: (token,userId) => dispatch(actions.getPosts(token,userId))
+        getPost: (token, userId) => dispatch(actions.getPosts(token, userId))
     };
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(PostList);
-

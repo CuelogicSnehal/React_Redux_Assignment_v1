@@ -3,43 +3,30 @@ import { connect } from 'react-redux';
 import Input from '../../../components/UI/Input/Input';
 import Button from '../../../components/UI/Button/Button';
 import classes from './updatePost.css';
+import { BrowserRouter, Route, Redirect } from 'react-router-dom';
 import * as actions from '../../../store/actions/index';
 import Spinner from '../../../components/UI/Spinner/Spinner'
-class updatePost extends Component {
 
-    inputChangedHandler = (event) => {
-        console.log("[inputChangedHandler]", event.target)
-    }
+class updatePost extends Component {
 
     submitHandler = (event) => {
         event.preventDefault();
-        this.props.updatePost(event.target.title.value, event.target.content.value, this.props.match.params.id, this.props.token, this.props.userId);
+        this.props.updatePost(this.getTitleInput.value, this.getContentInput.value, this.props.post.id, this.props.token, this.props.userId);
     }
 
     render() {
-        let postDetails = this.props.postDetails
-        var title, content
-
-        postDetails.map(post => {
-            title = post.title,
-                content = post.content
-        })
-
         let form1 = <form>
-            <label>
-                <input type="text"
-                    name="title"
-                    required
-                    disabled
-                    defaultValue={title}
-                />
-            </label> <br />
+            <input type="text"
+                name="title"
+                required
+                ref={(input) => this.getTitleInput = input} defaultValue={this.props.post.title}
+            />
+            <br />
             <input type="text"
                 name="content"
                 required
-                defaultValue={content}
-                onChange={(event) => this.inputChangedHandler(event)} />
-
+                ref={(input) => this.getContentInput = input} defaultValue={this.props.post.content}
+            />
             <br />
         </form>
 
@@ -57,10 +44,10 @@ class updatePost extends Component {
 
         return (
             <div className={classes.NewPost}>
-                <form onSubmit={this.submitHandler}>
+                <form onSubmit={this.submitHandler} >
                     {errorMessage}
                     {form1}
-                    <Button btnType="Success">Update Post</Button>
+                    <Button btnType="Success" clicked={this.props.purchaseCancelled}>Update Post</Button>
                 </form>
             </div>
         );

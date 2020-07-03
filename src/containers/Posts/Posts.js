@@ -6,6 +6,7 @@ import Button from '../../components/UI/Button/Button';
 import classes from './Posts.css';
 import * as actions from '../../store/actions/index';
 import Spinner from '../../components/UI/Spinner/Spinner'
+import { Redirect } from 'react-router-dom';
 
 class NewPost extends Component {
     state = {
@@ -18,7 +19,9 @@ class NewPost extends Component {
                 },
                 value: '',
                 validation: {
-                    required: true
+                    required: true,
+                    minLength: 5,
+                    maxLength: 10
                 },
                 valid: false,
                 touched: false
@@ -32,13 +35,16 @@ class NewPost extends Component {
                 },
                 value: '',
                 validation: {
-                    required: true
+                    required: true,
+                    minLength: 5,
+                    maxLength: 20
                 },
                 valid: false,
                 touched: false
             }
         },
-        isSignup: true
+        formIsValid: false,
+        onSubmitValid: false
     }
 
     checkValidity(value, rules) {
@@ -54,25 +60,47 @@ class NewPost extends Component {
             const pattern = /^\d+$/;
             isValid = pattern.test(value) && isValid
         }
+
+        if (rules.minLength) {
+            isValid = value.length >= rules.minLength && isValid
+        }
+
+        if (rules.maxLength) {
+            isValid = value.length <= rules.maxLength && isValid
+        }
+
         return isValid;
     }
 
-    inputChangedHandler = (event, postTitle) => {
+    inputChangedHandler = (event, inputIdentifier) => {
         const updatedControls = {
-            ...this.state.controls,
-            [postTitle]: {
-                ...this.state.controls[postTitle],
-                value: event.target.value,
-                valid: this.checkValidity(event.target.value, this.state.controls[postTitle].validation),
-                touched: true
-            }
-        };
-        this.setState({ controls: updatedControls });
+            ...this.state.controls
+        }
+
+        const updatedFormElement = {
+            ...updatedControls[inputIdentifier]
+        }
+
+        updatedFormElement.value = event.target.value;
+        updatedFormElement.valid = this.checkValidity(updatedFormElement.value, updatedFormElement.validation)
+        updatedFormElement.touched = true;
+        updatedControls[inputIdentifier] = updatedFormElement;
+
+        let formIsValid = true
+        for (let inputIdentifier in updatedControls) {
+            formIsValid = updatedControls[inputIdentifier].valid && formIsValid;
+        }
+
+        this.setState({ controls: updatedControls, formIsValid: formIsValid })
     }
 
     submitHandler = (event) => {
         event.preventDefault();
         this.props.addPost(this.state.controls.title.value, this.state.controls.content.value, this.props.token, this.props.userId);
+    }
+
+    onAddHandler = () => {
+        this.setState({ onSubmitValid: true })
     }
 
     render() {
@@ -108,16 +136,19 @@ class NewPost extends Component {
             )
         }
 
+        let authRedirect = null;
+        if (this.state.onSubmitValid) {
+            authRedirect = <Redirect to="/" />
+        }
         return (
             <div className={classes.NewPost}>
                 <form onSubmit={this.submitHandler}>
                     {errorMessage}
                     {form}
-                    <Button btnType="Success">Add Post</Button>
+                    <Button btnType="Success" disabled={!this.state.formIsValid}>Add Post</Button>
                 </form>
             </div>
         );
-
     }
 }
 

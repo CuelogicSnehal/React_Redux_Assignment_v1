@@ -4,10 +4,12 @@ import { connect } from 'react-redux';
 import * as actions from '../../../store/actions/index';
 import Modal from '../../../components/UI/Modal/Modal';
 import UpdatePost from '../updatePost/updatePost';
+import { Button, Card } from 'semantic-ui-react'
+
 class FullPost extends Component {
-     state ={
-        updateModal : false
-    }  
+    state = {
+        updateModal: false
+    }
 
     componentDidMount() {
         this.props.getPostById(this.props.token, this.props.userId, this.props.match.params.id);
@@ -18,27 +20,40 @@ class FullPost extends Component {
     }
 
     updatePostHandler = () => {
-        this.setState({updateModal : true})
-        this.props.updatePost(this.props.token, this.props.userId, this.props.match.params.id, { 'title': 'title' });
+        this.setState({ updateModal: true })
     }
-    
+
+    purchaseCancelHandler = () => {
+        this.setState({ updateModal: false });
+    }
+
     closeModalHandler = () => {
-        this.setState({updateModal : false})
+        this.setState({ updateModal: false })
     }
 
     render() {
         let posts = this.props.posts.map(post => {
             return (
-                <div className="FullPost">
+                <div>
                     <Modal show={this.state.updateModal} modalClosed={this.closeModalHandler} >
-                        <UpdatePost postDetails={this.props.posts}/>
-                     </Modal>
-                    <h5>{post.title}</h5>
-                    <p>{post.content}</p>
-                    <div className="Edit">
-                        <button onClick={this.updatePostHandler} className="Delete">Update</button>
-                        <button onClick={this.deletePostHandler} className="Delete">Delete</button>
-                    </div>
+                        <UpdatePost post={post} purchaseCancelled={this.purchaseCancelHandler} />
+                    </Modal>
+                    <Card.Group>
+                        <Card>
+                            <Card.Content>
+                                <Card.Header>{post.title}</Card.Header>
+                                <Card.Description>
+                                    {post.content}
+                                </Card.Description>
+                            </Card.Content>
+                            <Card.Content extra>
+                                <div>
+                                    <button onClick={this.updatePostHandler} className="Delete">Update</button>
+                                    <button onClick={this.deletePostHandler} className="Delete">Delete</button>
+                                </div>
+                            </Card.Content>
+                        </Card>
+                    </Card.Group>
                 </div>
             )
         })
@@ -59,9 +74,7 @@ const mapDispatchToProps = dispatch => {
     return {
         getPostById: (token, userId, postId) => dispatch(actions.getPostById(token, userId, postId)),
         deletePost: (token, userId, postId) => dispatch(actions.deletePost(token, userId, postId)),
-        updatePost: (token, userId, postId, data) => dispatch(actions.updatePost(token, userId, postId, data))
     };
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(FullPost);
-

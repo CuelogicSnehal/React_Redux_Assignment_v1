@@ -1,5 +1,6 @@
 import * as actionTypes from '../actions/actionTypes'
-import { post } from '../actions'
+import { post } from '../actions';
+import { updateObject } from '../utility';
 
 const initialState = {
     posts: [],
@@ -31,9 +32,9 @@ const reducer = (state = initialState, action) => {
             }
 
         case actionTypes.FETCH_POST_BY_ID:
-            return{
+            return {
                 ...state,
-                posts: state.posts.filter(post => post.id == action.post)
+                posts: [action.post]
             }
 
         case actionTypes.FETCH_POST_BY_ID_FAILED:
@@ -52,11 +53,15 @@ const reducer = (state = initialState, action) => {
                 return newState;
             }
         case actionTypes.UPDATE_POST:
-            return [
-            ...state.filter(post => post.id !== action.postId ),
-            Object.assign({}, action.postId)
-          ]
-
+            return updateObject(state, {
+                posts: [
+                    {
+                        title: action.posts.title,
+                        content: action.posts.content,
+                        userId: action.posts.userId
+                    }
+                ]
+            });
         default: return state
     }
 }

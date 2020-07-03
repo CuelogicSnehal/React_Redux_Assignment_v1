@@ -1,22 +1,44 @@
 import React, { Component } from 'react';
-import { Route, Switch } from 'react-router-dom';
+import { Route, Switch ,withRouter } from 'react-router-dom';
 import Layout from './hoc/Layout/Layout';
-import Posts from './containers/Posts/Posts';
-import PostList from './containers/Posts/PostList/PostList';
-import Auth from './containers/Auth/Auth';
-import Logout from './containers/Auth/Logout/Logout';
-import  FullPost from  './containers/Posts/FullPost/FullPost';
+import asyncComponent from './hoc/asyncComponent';
+import { connect } from 'react-redux';
+import * as actions from './store/actions/index';
+
+const asyncAddPost = asyncComponent(() => {
+  return import('./containers/Posts/Posts')
+})
+
+const asyncAuth = asyncComponent(() => {
+  return import('./containers/Auth/Auth')
+})
+
+const asyncLogout = asyncComponent(() => {
+  return import('./containers/Auth/Logout/Logout')
+})
+
+const asyncFullPost = asyncComponent(() => {
+  return import('./containers/Posts/FullPost/FullPost')
+})
+
+const asyncPostList = asyncComponent(() => {
+  return import('./containers/Posts/PostList/PostList')
+})
 class App extends Component {
-  render () {
+  componentDidMount() {
+    this.props.onTryAutoSignup();
+  }
+
+  render() {
     return (
       <div>
         <Layout>
           <Switch>
-            <Route path="/new-post" component={Posts} />
-            <Route path="/login" component={Auth} />
-            <Route path="/logout" component={Logout} />
-            <Route  path="/posts/:id" component={FullPost} />
-            <Route path="/" exact component={PostList} />
+            <Route path="/new-post" component={asyncAddPost} />
+            <Route path="/login" component={asyncAuth} />
+            <Route path="/logout" component={asyncLogout} />
+            <Route path="/posts/:id" component={asyncFullPost} />
+            <Route path="/" exact component={asyncPostList} />
           </Switch>
         </Layout>
       </div>
@@ -24,4 +46,9 @@ class App extends Component {
   }
 }
 
-export default App;
+const mapDispatchToProps = dispatch => {
+  return {
+    onTryAutoSignup: () => dispatch(actions.authCheckState())
+  }
+}
+export default withRouter(connect(null, mapDispatchToProps)(App));
