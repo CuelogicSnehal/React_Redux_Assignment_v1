@@ -138,11 +138,7 @@ class NewPost extends Component {
                 <p>{this.props.error.message}</p>
             )
         }
-
-        let authRedirect = null;
-        if (this.state.onSubmitValid) {
-            //authRedirect = <Redirect to="/" />
-        }
+        
         return (
             <div className={classes.NewPost}>
                 <form onSubmit={this.submitHandler}>

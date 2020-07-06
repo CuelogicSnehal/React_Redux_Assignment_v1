@@ -40,7 +40,7 @@ class FullPost extends Component {
             return (<Spinner />)
         } else {
             let post = this.props.posts
-            if (this.props.posts.length == 1) {
+            if (this.props.posts.length === 1) {
                 post = this.props.posts[0]
             }
             return (<div>

@@ -45,7 +45,7 @@ const reducer = (state = initialState, action) => {
             {
                 const newState = Object.assign([], state);
                 const delPost = state.posts.findIndex(post => {
-                    return post.id == action.postId
+                    return post.id === action.postId
                 })
                 newState.splice(delPost, 1);
                 return newState;

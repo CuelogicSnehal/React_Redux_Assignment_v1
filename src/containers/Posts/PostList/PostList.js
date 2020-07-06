@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import * as actions from '../../../store/actions/index';
 import './PostList.css';
-import { Grid, Segment } from 'semantic-ui-react';
+import { Table } from 'semantic-ui-react';
 
 class PostList extends Component {
     state = {
@@ -26,13 +26,13 @@ class PostList extends Component {
         return (<div>
             {posts.map((post) => (
                 <div key={post.id} onClick={() => this.postSelectedHandler(post.id, post)}>
-                    <Grid columns={3} divided>
-                        <Grid.Row stretched>
-                            <Grid.Column>
-                                <Segment>{post.title}</Segment>
-                            </Grid.Column>
-                        </Grid.Row>
-                    </Grid>
+                    <Table color='black' key='black'>
+                        <Table.Body colSpan='1' >
+                            <Table.Row  >
+                                <Table.Cell rowSpan='3'>{post.title}</Table.Cell>   
+                            </Table.Row>
+                        </Table.Body>
+                    </Table>
                 </div>
             ))}
         </div>)
