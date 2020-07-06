@@ -1,27 +1,27 @@
 import React, { Component } from 'react';
 import { Route, Switch ,withRouter } from 'react-router-dom';
 import Layout from './hoc/Layout/Layout';
-import asyncComponent from './hoc/asyncComponent';
+import postRoute from './hoc/asyncComponent';
 import { connect } from 'react-redux';
 import * as actions from './store/actions/index';
 
-const asyncAddPost = asyncComponent(() => {
+const addPost = postRoute(() => {
   return import('./containers/Posts/Posts')
 })
 
-const asyncAuth = asyncComponent(() => {
+const auth = postRoute(() => {
   return import('./containers/Auth/Auth')
 })
 
-const asyncLogout = asyncComponent(() => {
+const logout = postRoute(() => {
   return import('./containers/Auth/Logout/Logout')
 })
 
-const asyncFullPost = asyncComponent(() => {
+const fullPost = postRoute(() => {
   return import('./containers/Posts/FullPost/FullPost')
 })
 
-const asyncPostList = asyncComponent(() => {
+const postList = postRoute(() => {
   return import('./containers/Posts/PostList/PostList')
 })
 class App extends Component {
@@ -34,11 +34,11 @@ class App extends Component {
       <div>
         <Layout>
           <Switch>
-            <Route path="/new-post" component={asyncAddPost} />
-            <Route path="/login" component={asyncAuth} />
-            <Route path="/logout" component={asyncLogout} />
-            <Route path="/posts/:id" component={asyncFullPost} />
-            <Route path="/" exact component={asyncPostList} />
+            <Route path="/new-post" component={addPost} />
+            <Route path="/login" component={auth} />
+            <Route path="/logout" component={logout} />
+            <Route path="/posts/:id" component={fullPost} />
+            <Route path="/" exact component={postList} />
           </Switch>
         </Layout>
       </div>

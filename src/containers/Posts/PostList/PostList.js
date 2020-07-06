@@ -3,22 +3,29 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import * as actions from '../../../store/actions/index';
 import './PostList.css';
-import { Grid, Segment } from 'semantic-ui-react'
+import { Grid, Segment } from 'semantic-ui-react';
 
 class PostList extends Component {
+    state = {
+        fullpost: false,
+        post_id: null
+    }
 
     componentDidMount() {
         this.props.getPost(this.props.token, this.props.userId);
     }
 
-    postSelectedHandler = (post_id) => {
+    postSelectedHandler = (post_id, post) => {
+        this.setState({ fullpost: true, post_id: post_id });
         this.props.history.push('/posts/' + post_id);
     }
 
     render() {
+        let posts
+        Array.isArray(this.props.posts) ? posts = this.props.posts : posts = [this.props.posts];
         return (<div>
-            {this.props.posts.map((post) => (
-                <div key={post.id} onClick={() => this.postSelectedHandler(post.id)}>
+            {posts.map((post) => (
+                <div key={post.id} onClick={() => this.postSelectedHandler(post.id, post)}>
                     <Grid columns={3} divided>
                         <Grid.Row stretched>
                             <Grid.Column>

@@ -1,5 +1,4 @@
 import * as actionTypes from '../actions/actionTypes'
-import { post } from '../actions';
 import { updateObject } from '../utility';
 
 const initialState = {
@@ -33,8 +32,7 @@ const reducer = (state = initialState, action) => {
 
         case actionTypes.FETCH_POST_BY_ID:
             return {
-                ...state,
-                posts: [action.post]
+                posts: action.post
             }
 
         case actionTypes.FETCH_POST_BY_ID_FAILED:

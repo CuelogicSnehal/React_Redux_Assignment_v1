@@ -5,8 +5,7 @@ import Input from '../../components/UI/Input/Input';
 import Button from '../../components/UI/Button/Button';
 import classes from './Posts.css';
 import * as actions from '../../store/actions/index';
-import Spinner from '../../components/UI/Spinner/Spinner'
-import { Redirect } from 'react-router-dom';
+import Spinner from '../../components/UI/Spinner/Spinner';
 
 class NewPost extends Component {
     state = {
@@ -97,6 +96,10 @@ class NewPost extends Component {
     submitHandler = (event) => {
         event.preventDefault();
         this.props.addPost(this.state.controls.title.value, this.state.controls.content.value, this.props.token, this.props.userId);
+        setTimeout(() => {
+            this.props.history.push('/');
+        }, 700)
+
     }
 
     onAddHandler = () => {
@@ -138,7 +141,7 @@ class NewPost extends Component {
 
         let authRedirect = null;
         if (this.state.onSubmitValid) {
-            authRedirect = <Redirect to="/" />
+            //authRedirect = <Redirect to="/" />
         }
         return (
             <div className={classes.NewPost}>

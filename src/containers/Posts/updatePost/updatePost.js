@@ -1,14 +1,11 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import Input from '../../../components/UI/Input/Input';
 import Button from '../../../components/UI/Button/Button';
 import classes from './updatePost.css';
-import { BrowserRouter, Route, Redirect } from 'react-router-dom';
 import * as actions from '../../../store/actions/index';
-import Spinner from '../../../components/UI/Spinner/Spinner'
+import Spinner from '../../../components/UI/Spinner/Spinner';
 
 class updatePost extends Component {
-
     submitHandler = (event) => {
         event.preventDefault();
         this.props.updatePost(this.getTitleInput.value, this.getContentInput.value, this.props.post.id, this.props.token, this.props.userId);
@@ -35,7 +32,6 @@ class updatePost extends Component {
         }
 
         let errorMessage = null;
-
         if (this.props.error) {
             errorMessage = (
                 <p>{this.props.error.message}</p>
@@ -47,7 +43,7 @@ class updatePost extends Component {
                 <form onSubmit={this.submitHandler} >
                     {errorMessage}
                     {form1}
-                    <Button btnType="Success" clicked={this.props.purchaseCancelled}>Update Post</Button>
+                    <Button btnType="Success" clicked={this.props.updateCancelled}>Update Post</Button>
                 </form>
             </div>
         );
@@ -62,7 +58,7 @@ const mapStateToProps = state => {
 }
 const mapDispatchToProps = dispatch => {
     return {
-        updatePost: (title, content, id, token, userId) => dispatch(actions.updatePost(title, content, id, token, userId)),
+        updatePost: (title, content, id, token, userId) => dispatch(actions.updatePost(title, content, id, token, userId))
     };
 };
 

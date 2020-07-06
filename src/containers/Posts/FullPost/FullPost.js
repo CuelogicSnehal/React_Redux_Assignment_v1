@@ -4,7 +4,8 @@ import { connect } from 'react-redux';
 import * as actions from '../../../store/actions/index';
 import Modal from '../../../components/UI/Modal/Modal';
 import UpdatePost from '../updatePost/updatePost';
-import { Button, Card } from 'semantic-ui-react'
+import { Card } from 'semantic-ui-react';
+import Spinner from '../../../components/UI/Spinner/Spinner';
 
 class FullPost extends Component {
     state = {
@@ -17,13 +18,16 @@ class FullPost extends Component {
 
     deletePostHandler = () => {
         this.props.deletePost(this.props.token, this.props.userId, this.props.match.params.id);
+        setTimeout(() => {
+            this.props.history.push('/');
+        }, 700)
     }
 
     updatePostHandler = () => {
         this.setState({ updateModal: true })
     }
 
-    purchaseCancelHandler = () => {
+    updateCancelHandler = () => {
         this.setState({ updateModal: false });
     }
 
@@ -32,32 +36,36 @@ class FullPost extends Component {
     }
 
     render() {
-        let posts = this.props.posts.map(post => {
-            return (
-                <div>
+        if (this.props.posts.length > 1) {
+            return (<Spinner />)
+        } else {
+            let post = this.props.posts
+            if (this.props.posts.length == 1) {
+                post = this.props.posts[0]
+            }
+            return (<div>
+                <Card.Group>
                     <Modal show={this.state.updateModal} modalClosed={this.closeModalHandler} >
-                        <UpdatePost post={post} purchaseCancelled={this.purchaseCancelHandler} />
+                        <UpdatePost post={post} updateCancelled={this.updateCancelHandler} />
                     </Modal>
-                    <Card.Group>
-                        <Card>
-                            <Card.Content>
-                                <Card.Header>{post.title}</Card.Header>
-                                <Card.Description>
-                                    {post.content}
-                                </Card.Description>
-                            </Card.Content>
-                            <Card.Content extra>
-                                <div>
-                                    <button onClick={this.updatePostHandler} className="Delete">Update</button>
-                                    <button onClick={this.deletePostHandler} className="Delete">Delete</button>
-                                </div>
-                            </Card.Content>
-                        </Card>
-                    </Card.Group>
-                </div>
+                    <Card>
+                        <Card.Content>
+                            <Card.Header>{post.title}</Card.Header>
+                            <Card.Description>
+                                {post.content}
+                            </Card.Description>
+                        </Card.Content>
+                        <Card.Content extra>
+                            <div>
+                                <button onClick={this.updatePostHandler} className="Delete">Edit</button>
+                                <button onClick={this.deletePostHandler} className="Delete">Delete</button>
+                            </div>
+                        </Card.Content>
+                    </Card>
+                </Card.Group>
+            </div>
             )
-        })
-        return posts;
+        }
     }
 }
 
