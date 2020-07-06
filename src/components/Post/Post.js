@@ -8,13 +8,6 @@ const post = (props) => {
         <Card.Group  onClick={props.clicked}>
         <Card fluid color='red' header={props.title} />
         <Card fluid color='orange' header={props.content} />
-      </Card.Group>
-    //     <article className="Post" onClick={props.clicked}>
-    //     <h1>{props.title}</h1>
-    //     <div className="Info">
-    //         <div className="Content">{props.content}</div>
-    //     </div>
-    // </article>
-    )
+      </Card.Group>)
 }
 export default post;
