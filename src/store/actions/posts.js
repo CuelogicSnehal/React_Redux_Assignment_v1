@@ -1,4 +1,4 @@
-import axios from 'axios';
+import axios from '../../axios';
 import * as actionTypes from './actionTypes';
 import HttpsProxyAgent from 'https-proxy-agent';
 var agent = new HttpsProxyAgent("http://localhost:3000");
@@ -31,7 +31,7 @@ export const post = (title, content, token, userId) => {
             content: content,
             userId: userId
         }
-        axios.post('https://assignment-87476.firebaseio.com/posts.json?auth=' + token, data, {
+        axios.post('/posts.json?auth=' + token, data, {
             httpAgent: agent
         }).then(response => {
             dispatch(postSuccess(response.data))
@@ -57,7 +57,7 @@ export const fetchPostStart = () => {
 export const getPosts = (token, userId) => {
     return dispatch => {
         const queryParams = '?auth=' + token + '&orderBy="userId"&equalTo="' + userId + '"';
-        axios.get('https://assignment-87476.firebaseio.com/posts.json' + queryParams, {
+        axios.get('/posts.json' + queryParams, {
             httpAgent: agent
         }).then(response => {
             let posts = []
@@ -85,7 +85,7 @@ export const fetchPostById = (res, id) => {
 export const getPostById = (token, userId, postId) => {
     return dispatch => {
         const queryParams = '?auth=' + token;
-        axios.get(`https://assignment-87476.firebaseio.com/posts/${postId}.json` + queryParams,
+        axios.get(`/posts/${postId}.json` + queryParams,
         ).then(response => {
             dispatch(fetchPostById(response.data, postId));
         }).catch(error => {
@@ -104,7 +104,7 @@ export const deletePostSuccess = (postId) => {
 export const deletePost = (token, userId, postId) => {
     return dispatch => {
         const queryParams = '?auth=' + token;
-        fetch(`https://assignment-87476.firebaseio.com/posts/${postId}.json` + queryParams, {
+        fetch(`https://assignment-87476.firebaseio.com//posts/${postId}.json` + queryParams, {
             method: 'DELETE'
         }).then(response => {
             dispatch(deletePostSuccess(postId));
@@ -130,7 +130,7 @@ export const updatePost = (title, content, id, token, userId) => {
             userId: userId
         }
         const queryParams = '?auth=' + token;
-        axios.put(`https://assignment-87476.firebaseio.com/posts/${id}.json` + queryParams, data).then(response => {
+        axios.put(`/posts/${id}.json` + queryParams, data).then(response => {
             dispatch(updatePostSuccess(data, id));
         }).catch(error => {
             dispatch(fetchPostFailed(error))
